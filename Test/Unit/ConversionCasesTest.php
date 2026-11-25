@@ -72,6 +72,40 @@ final class ConversionCasesTest extends TestCase
                 '<ul><li>een</li><li>twee<ul><li>genest</li></ul></li></ul><ol><li>eerst</li><li>dan</li></ol>',
                 "- een\n- twee\n    - genest\n\n1. eerst\n2. dan",
             ],
+            'indented price is no code block' => [
+                '<div class="price-box"><span class="price">
+                         € 7,49
+                    </span></div><p>Op voorraad</p>',
+                "€ 7,49\n\nOp voorraad",
+            ],
+            'icon-only links dropped' => [
+                '<p>Deel <a href="https://example.org/share"><svg><path d="M0"/></svg></a><a href="/wishlist"> </a><a href="/compare"><span aria-hidden="true">+</span></a><a href="/zoom"><img src="/media/zoom.svg" alt=""></a> hier</p>',
+                'Deel hier',
+            ],
+            'image link with aria-label gets that as text' => [
+                '<ul><li><a href="/merk/a" aria-label="Merk A onderdelen"><img src="/media/a.webp" alt=""></a></li><li><a href="/merk/b" title="Merk B"><svg></svg></a></li></ul>',
+                "- [Merk A onderdelen](https://shop.example.com/merk/a)\n- [Merk B](https://shop.example.com/merk/b)",
+            ],
+            'empty list items and lists dropped' => [
+                '<p>Voor</p><ul><li><a href="/x"><img src="/media/x.webp" alt=""></a></li><li>Blijft</li><li> </li></ul><ul><li><a href="/y"></a></li><li><button>Meer</button></li></ul><p>Na</p>',
+                "Voor\n\n- Blijft\n\nNa",
+            ],
+            'spaces inside link text move outside' => [
+                '<p>Zie<a href="/waarborg"> Veilig kopen </a>en <a href="/reviews"><span> 4,8 </span><span>Google</span> </a>nu</p>',
+                'Zie [Veilig kopen](https://shop.example.com/waarborg) en [4,8 Google](https://shop.example.com/reviews) nu',
+            ],
+            'link around an image with alt kept' => [
+                '<p><a href="/stoel.html"><img src="/media/a.jpg" alt="Stoel"></a></p>',
+                '[![Stoel](https://shop.example.com/media/a.jpg)](https://shop.example.com/stoel.html)',
+            ],
+            'skip links removed' => [
+                '<a href="#slider-end" class="sr-only focus:not-sr-only">Carrousel overslaan</a><a class="action skip gallery-next-area" href="#gallery-next">Naar het einde van de galerij</a><p>Product</p><span id="slider-end"></span>',
+                'Product',
+            ],
+            'label of a removed control removed' => [
+                '<p>Prijs</p><label for="qty">Aantal</label><input id="qty" name="qty" type="number"><label><input type="checkbox" name="gift"> Cadeauverpakking</label><label for="elsewhere">Blijft</label><p>Einde</p>',
+                "Prijs\n\nBlijft\n\nEinde",
+            ],
         ];
     }
 
