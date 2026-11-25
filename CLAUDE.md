@@ -25,7 +25,7 @@ Model/Config.php          reads the store config into Settings;  Model/Discovery
 Model/Config/Source/      LinkMode (Auto / Yes / No)
 Observer/ProcessResponse  controller_front_send_response_before: applies ResponseChanges
 ViewModel/AiCatalog       <link rel="ai-catalog"> in head.additional
-view/frontend/  i18n/{en_US,nl_NL}.csv  Test/Unit/  .github/workflows/ci.yml
+view/frontend/  i18n/{en_US,nl_NL}.csv  Test/Unit/  .github/workflows/{ci,release}.yml
 ```
 
 ## Commands
@@ -54,3 +54,5 @@ Do **not** add a 'Generated with Claude Code' line in a PR.
 ## Versioning
 
 Calendar versioning `YY.WW.PATCH` (e.g. `26.48.0`), tagged `v{version}`. Composer reads the version from the tag; `composer.json` has no `version` field. Update `CHANGELOG.md` with every release.
+
+Release: add a `## {version}` section to `CHANGELOG.md`, merge to `main`, then tag and push (`git tag v{version} && git push origin v{version}`). The tag triggers `.github/workflows/release.yml`, which creates the GitHub Release with that section as its notes, and fails when the section is missing. No zip is attached: Composer installs from the tag.
