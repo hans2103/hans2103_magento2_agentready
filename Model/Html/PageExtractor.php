@@ -197,11 +197,79 @@ final class PageExtractor
             }
         }
 
+        $remove = array_merge($remove, self::orphanedLabels($xpath, $content, $remove));
+
         foreach ($remove as $node) {
             if ($node->parentNode instanceof DOMNode) {
                 $node->parentNode->removeChild($node);
             }
         }
+    }
+
+    /**
+     * The labels whose form control is being removed: the element their for attribute names, or
+     * the control they wrap. Without the control the label ("Quantity") is stray UI text.
+     *
+     * @param   DOMXPath       $xpath    The document
+     * @param   DOMElement     $content  The main content element
+     * @param   list<DOMNode>  $remove   The nodes being removed
+     *
+     * @return  list<DOMNode>
+     *
+     * @since  26.48.1
+     */
+    private static function orphanedLabels(DOMXPath $xpath, DOMElement $content, array $remove): array
+    {
+        $removed = static function (DOMNode $node) use ($remove, $content): bool {
+            for ($current = $node; $current !== null && $current !== $content; $current = $current->parentNode) {
+                if (in_array($current, $remove, true)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        $labels = [];
+
+        foreach (self::nodes($xpath, './/label', $content) as $label) {
+            if (!$label instanceof DOMElement || $removed($label)) {
+                continue;
+            }
+
+            $for      = trim($label->getAttribute('for'));
+            $controls = $for !== ''
+                ? self::nodes($xpath, '//*[@id=' . self::xpathLiteral($for) . ']', $label)
+                : self::nodes($xpath, './/input | .//select | .//textarea | .//button | .//meter | .//output | .//progress', $label);
+
+            if ($controls !== [] && $removed($controls[0])) {
+                $labels[] = $label;
+            }
+        }
+
+        return $labels;
+    }
+
+    /**
+     * A string as an XPath literal, also when it contains quotes.
+     *
+     * @param   string  $value  The string
+     *
+     * @return  string
+     *
+     * @since  26.48.1
+     */
+    private static function xpathLiteral(string $value): string
+    {
+        if (!str_contains($value, "'")) {
+            return "'" . $value . "'";
+        }
+
+        if (!str_contains($value, '"')) {
+            return '"' . $value . '"';
+        }
+
+        return "concat('" . str_replace("'", "', \"'\", '", $value) . "')";
     }
 
     /**
@@ -215,7 +283,9 @@ final class PageExtractor
      * Fixes the HTML patterns that convert to broken or glued-together Markdown:
      *
      * - a decorative image (alt="") is removed;
+     * - a skip link (see isSkipLink()) is removed;
      * - a link to a fragment (#…) or javascript: keeps only its text;
+     * - a link with no text and no image left (an icon) is removed;
      * - a link around blocks (a clickable card) becomes a link around its text, the blocks' texts
      *   separated by a space;
      * - two sibling elements with nothing between them (name and job title that CSS shows on two
@@ -239,6 +309,15 @@ final class PageExtractor
         foreach (self::nodes($xpath, './/a[@href]', $content) as $link) {
             $href = strtolower(trim($link->getAttribute('href')));
 
+            if (!$link instanceof DOMElement) {
+                continue;
+            }
+
+            if (strlen($href) > 1 && $href[0] === '#' && self::isSkipLink($link)) {
+                $link->parentNode?->removeChild($link);
+                continue;
+            }
+
             if ($href !== '' && ($href[0] === '#' || str_starts_with($href, 'javascript:'))) {
                 while ($link->firstChild !== null) {
                     $link->parentNode?->insertBefore($link->firstChild, $link);
@@ -246,6 +325,11 @@ final class PageExtractor
 
                 $link->parentNode?->removeChild($link);
             }
+        }
+
+        // A link with no text and no image left (an icon, or a decorative image removed above).
+        foreach (self::nodes($xpath, './/a[@href][not(normalize-space(.))][not(.//img)]', $content) as $link) {
+            $link->parentNode?->removeChild($link);
         }
 
         $blocks = implode(' or ', array_map(static fn (string $tag): string => 'self::' . $tag, self::BLOCK_ELEMENTS));
@@ -269,6 +353,30 @@ final class PageExtractor
         foreach (self::nodes($xpath, './/*[following-sibling::node()[1][self::*]]', $content) as $element) {
             $element->parentNode?->insertBefore($doc->createTextNode(' '), $element->nextSibling);
         }
+    }
+
+    /**
+     * Whether an in-page link is a skip link ("Skip carousel", "Skip to content"): a keyboard
+     * shortcut past a part of the page, hidden until it gets focus. Recognised by its class: a
+     * token sr-only, visually-hidden, screen-reader-text, or skip (also as part, like skip-link).
+     *
+     * @param   DOMElement  $link  A link to a fragment
+     *
+     * @return  boolean
+     *
+     * @since  26.48.1
+     */
+    private static function isSkipLink(DOMElement $link): bool
+    {
+        foreach (preg_split('/\s+/', strtolower($link->getAttribute('class')), -1, PREG_SPLIT_NO_EMPTY) ?: [] as $token) {
+            if (in_array($token, ['sr-only', 'visually-hidden', 'screen-reader-text'], true)
+                || preg_match('/(^|-)skip(-|$)/', $token) === 1
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -72,6 +72,28 @@ final class ConversionCasesTest extends TestCase
                 '<ul><li>een</li><li>twee<ul><li>genest</li></ul></li></ul><ol><li>eerst</li><li>dan</li></ol>',
                 "- een\n- twee\n    - genest\n\n1. eerst\n2. dan",
             ],
+            'indented price is no code block' => [
+                '<div class="price-box"><span class="price">
+                         € 7,49
+                    </span></div><p>Op voorraad</p>',
+                "€ 7,49\n\nOp voorraad",
+            ],
+            'icon-only links dropped' => [
+                '<p>Deel <a href="https://example.org/share"><svg><path d="M0"/></svg></a><a href="/wishlist"> </a><a href="/compare"><span aria-hidden="true">+</span></a><a href="/zoom"><img src="/media/zoom.svg" alt=""></a> hier</p>',
+                'Deel hier',
+            ],
+            'link around an image with alt kept' => [
+                '<p><a href="/stoel.html"><img src="/media/a.jpg" alt="Stoel"></a></p>',
+                '[![Stoel](https://shop.example.com/media/a.jpg)](https://shop.example.com/stoel.html)',
+            ],
+            'skip links removed' => [
+                '<a href="#slider-end" class="sr-only focus:not-sr-only">Carrousel overslaan</a><a class="action skip gallery-next-area" href="#gallery-next">Naar het einde van de galerij</a><p>Product</p><span id="slider-end"></span>',
+                'Product',
+            ],
+            'label of a removed control removed' => [
+                '<p>Prijs</p><label for="qty">Aantal</label><input id="qty" name="qty" type="number"><label><input type="checkbox" name="gift"> Cadeauverpakking</label><label for="elsewhere">Blijft</label><p>Einde</p>',
+                "Prijs\n\nBlijft\n\nEinde",
+            ],
         ];
     }
 
