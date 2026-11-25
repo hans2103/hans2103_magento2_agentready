@@ -2,6 +2,13 @@
 
 All notable changes to this module. Versions follow calendar versioning `YY.WW.PATCH`.
 
+## 26.48.2
+
+Release process only; the module code is unchanged from 26.48.1.
+
+- Every tag `v{version}` now gets a GitHub Release, with the matching section of this changelog as its notes.
+- CI uses `actions/checkout` v7.
+
 ## 26.48.1
 
 Cleaner Markdown for shop pages.
