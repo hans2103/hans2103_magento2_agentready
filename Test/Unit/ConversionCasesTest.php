@@ -82,6 +82,18 @@ final class ConversionCasesTest extends TestCase
                 '<p>Deel <a href="https://example.org/share"><svg><path d="M0"/></svg></a><a href="/wishlist"> </a><a href="/compare"><span aria-hidden="true">+</span></a><a href="/zoom"><img src="/media/zoom.svg" alt=""></a> hier</p>',
                 'Deel hier',
             ],
+            'image link with aria-label gets that as text' => [
+                '<ul><li><a href="/merk/a" aria-label="Merk A onderdelen"><img src="/media/a.webp" alt=""></a></li><li><a href="/merk/b" title="Merk B"><svg></svg></a></li></ul>',
+                "- [Merk A onderdelen](https://shop.example.com/merk/a)\n- [Merk B](https://shop.example.com/merk/b)",
+            ],
+            'empty list items and lists dropped' => [
+                '<p>Voor</p><ul><li><a href="/x"><img src="/media/x.webp" alt=""></a></li><li>Blijft</li><li> </li></ul><ul><li><a href="/y"></a></li><li><button>Meer</button></li></ul><p>Na</p>',
+                "Voor\n\n- Blijft\n\nNa",
+            ],
+            'spaces inside link text move outside' => [
+                '<p>Zie<a href="/waarborg"> Veilig kopen </a>en <a href="/reviews"><span> 4,8 </span><span>Google</span> </a>nu</p>',
+                'Zie [Veilig kopen](https://shop.example.com/waarborg) en [4,8 Google](https://shop.example.com/reviews) nu',
+            ],
             'link around an image with alt kept' => [
                 '<p><a href="/stoel.html"><img src="/media/a.jpg" alt="Stoel"></a></p>',
                 '[![Stoel](https://shop.example.com/media/a.jpg)](https://shop.example.com/stoel.html)',

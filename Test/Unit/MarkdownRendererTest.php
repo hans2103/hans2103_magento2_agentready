@@ -75,6 +75,7 @@ final class MarkdownRendererTest extends TestCase
             'four-space nesting kept'              => ["- a\n    - b", "- a\n    - b"],
             'deep indentation outside lists gone'  => ["Price\n\n     € 7,49\n\t\tIn stock", "Price\n\n€ 7,49\nIn stock"],
             'list nesting kept after blank line'   => ["1. a\n\n    - b\n        - c", "1. a\n\n    - b\n        - c"],
+            'ordered list continuation kept'       => ["1. Name\n\n      Review text", "1. Name\n\n      Review text"],
             'indentation after a list ends gone'   => ["- a\n\nText\n\n     more", "- a\n\nText\n\nmore"],
             'empty links dropped'                  => ["Share [ ](https://x.test/a)[](https://x.test/b)[\t](https://x.test/c) here", "Share here"],
             'image without alt kept'               => ['![](https://x.test/a.jpg)', '![](https://x.test/a.jpg)'],

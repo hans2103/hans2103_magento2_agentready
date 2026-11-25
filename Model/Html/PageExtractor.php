@@ -285,11 +285,13 @@ final class PageExtractor
      * - a decorative image (alt="") is removed;
      * - a skip link (see isSkipLink()) is removed;
      * - a link to a fragment (#…) or javascript: keeps only its text;
-     * - a link with no text and no image left (an icon) is removed;
+     * - a link with no text and no image left (an icon) gets its aria-label or title as text, or
+     *   is removed when it has neither; list items left empty go, and lists left without items;
      * - a link around blocks (a clickable card) becomes a link around its text, the blocks' texts
      *   separated by a space;
+     * - whitespace at the start and end of a link's text moves outside the link;
      * - two sibling elements with nothing between them (name and job title that CSS shows on two
-     *   lines) get a space between them.
+     *   lines) get a space between them, unless one of them already has one at that side.
      *
      * @param   DOMXPath    $xpath    The document
      * @param   DOMElement  $content  The main content element
@@ -327,9 +329,48 @@ final class PageExtractor
             }
         }
 
-        // A link with no text and no image left (an icon, or a decorative image removed above).
+        // A link with no text and no image left (an icon, or a decorative image removed above):
+        // its accessible name (aria-label, else title) becomes the text; without one it goes.
         foreach (self::nodes($xpath, './/a[@href][not(normalize-space(.))][not(.//img)]', $content) as $link) {
-            $link->parentNode?->removeChild($link);
+            if (!$link instanceof DOMElement) {
+                continue;
+            }
+
+            $name = '';
+
+            foreach (['aria-label', 'title'] as $attribute) {
+                $name = trim(preg_replace('/\s+/u', ' ', $link->getAttribute($attribute)) ?? '');
+
+                if ($name !== '') {
+                    break;
+                }
+            }
+
+            if ($name === '') {
+                $link->parentNode?->removeChild($link);
+                continue;
+            }
+
+            while ($link->firstChild !== null) {
+                $link->removeChild($link->firstChild);
+            }
+
+            $link->appendChild($doc->createTextNode($name));
+
+            if ($attribute === 'title') {
+                // Else the converter repeats it as the link title: [Name](url "Name").
+                $link->removeAttribute('title');
+            }
+        }
+
+        // List items left empty (their only content removed) would become bare bullets; a list
+        // without items goes too.
+        foreach (self::nodes($xpath, './/li[not(normalize-space(.))][not(.//img)]', $content) as $item) {
+            $item->parentNode?->removeChild($item);
+        }
+
+        foreach (self::nodes($xpath, './/ul[not(li)] | .//ol[not(li)]', $content) as $list) {
+            $list->parentNode?->removeChild($list);
         }
 
         $blocks = implode(' or ', array_map(static fn (string $tag): string => 'self::' . $tag, self::BLOCK_ELEMENTS));
@@ -350,8 +391,56 @@ final class PageExtractor
             $card->appendChild($doc->createTextNode($label));
         }
 
+        foreach (self::nodes($xpath, './/a[@href]', $content) as $link) {
+            self::trimLinkText($xpath, $link);
+        }
+
         foreach (self::nodes($xpath, './/*[following-sibling::node()[1][self::*]]', $content) as $element) {
-            $element->parentNode?->insertBefore($doc->createTextNode(' '), $element->nextSibling);
+            $next = $element->nextSibling;
+
+            if (preg_match('/\s$/u', $element->textContent) === 1 || preg_match('/^\s/u', (string) $next?->textContent) === 1) {
+                continue;
+            }
+
+            $element->parentNode?->insertBefore($doc->createTextNode(' '), $next);
+        }
+    }
+
+    /**
+     * Moves the whitespace at the start and end of a link's text outside the link, so the text
+     * converts to [text](url) instead of [ text ](url) and stays apart from the words around it.
+     *
+     * @param   DOMXPath  $xpath  The document
+     * @param   DOMNode   $link   A link
+     *
+     * @return  void
+     *
+     * @since  26.48.1
+     */
+    private static function trimLinkText(DOMXPath $xpath, DOMNode $link): void
+    {
+        $texts = self::nodes($xpath, './/text()', $link);
+
+        foreach (['before' => $texts, 'after' => array_reverse($texts)] as $side => $ordered) {
+            $trimmed = false;
+
+            foreach ($ordered as $text) {
+                $value = (string) $text->nodeValue;
+                $kept  = $side === 'before' ? (preg_replace('/^\s+/u', '', $value) ?? $value) : (preg_replace('/\s+$/u', '', $value) ?? $value);
+
+                if ($kept !== $value) {
+                    $text->nodeValue = $kept;
+                    $trimmed         = true;
+                }
+
+                if ($kept !== '') {
+                    break;
+                }
+            }
+
+            if ($trimmed && $link->parentNode !== null && $link->ownerDocument !== null) {
+                $link->parentNode->insertBefore($link->ownerDocument->createTextNode(' '), $side === 'before' ? $link : $link->nextSibling);
+            }
         }
     }
 

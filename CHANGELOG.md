@@ -7,7 +7,8 @@ All notable changes to this module. Versions follow calendar versioning `YY.WW.P
 Cleaner Markdown for shop pages.
 
 - Indentation outside lists is removed, so an indented line (a price) no longer becomes a code block. List nesting stays.
-- Links without text (an icon, or a decorative image) are dropped.
+- Links without text (an icon, or a decorative image) get their `aria-label` or `title` as text, and are dropped when they have neither. List items left empty are dropped, and lists left without items.
+- Whitespace at the start and end of a link's text moves outside the link: `[text](url)` instead of `[ text ](url)`.
 - Skip links (an in-page link with class `sr-only`, `visually-hidden`, `screen-reader-text` or `skip`, like "Skip carousel") are removed.
 - A `<label>` whose form control is removed (the quantity field) is removed too.
 
