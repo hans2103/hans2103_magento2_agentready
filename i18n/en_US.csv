@@ -1,0 +1,38 @@
+"Agent Ready","Agent Ready"
+Markdown,Markdown
+"Markdown version","Markdown version"
+"Answer requests with <code>Accept: text/markdown</code> with a Markdown version of the page (Markdown for Agents). HTML stays the default.","Answer requests with <code>Accept: text/markdown</code> with a Markdown version of the page (Markdown for Agents). HTML stays the default."
+"Main content","Main content"
+"CSS selectors for the element that holds the main content, separated by commas. The first one that matches is used. Supported: tag, #id, .class, [attribute] and [attribute=value], combined with a space or &gt;.","CSS selectors for the element that holds the main content, separated by commas. The first one that matches is used. Supported: tag, #id, .class, [attribute] and [attribute=value], combined with a space or &gt;."
+"Leave out","Leave out"
+"CSS selectors of elements inside the main content that stay out of the Markdown, separated by commas: scripts, menus, forms, the sidebar. JSON-LD is always kept and added at the end.","CSS selectors of elements inside the main content that stay out of the Markdown, separated by commas: scripts, menus, forms, the sidebar. JSON-LD is always kept and added at the end."
+Frontmatter,Frontmatter
+"Start the Markdown with a YAML block holding the title, description and image of the page.","Start the Markdown with a YAML block holding the title, description and image of the page."
+JSON-LD,JSON-LD
+"Add the structured data (JSON-LD) of the page at the end, in one json code block.","Add the structured data (JSON-LD) of the page at the end, in one json code block."
+"Link headers","Link headers"
+"""Auto"" links a file only when it exists in the web root (pub/). Choose ""Yes"" for a file a module serves through a route.","""Auto"" links a file only when it exists in the web root (pub/). Choose ""Yes"" for a file a module serves through a route."
+"Send Link headers (RFC 8288) with HTML pages that point agents to the files below. Link headers already on the response are kept.","Send Link headers (RFC 8288) with HTML pages that point agents to the files below. Link headers already on the response are kept."
+llms.txt,llms.txt
+"Link to llms.txt (rel=describedby).","Link to llms.txt (rel=describedby)."
+"Agent skills index","Agent skills index"
+"Link to .well-known/agent-skills/index.json (rel=describedby).","Link to .well-known/agent-skills/index.json (rel=describedby)."
+"AI catalog (ARD)","AI catalog (ARD)"
+"Link to .well-known/ai-catalog.json (rel=ai-catalog), the Agentic Resource Discovery manifest: in the Link header and as a <code>&lt;link&gt;</code> in the HTML head.","Link to .well-known/ai-catalog.json (rel=ai-catalog), the Agentic Resource Discovery manifest: in the Link header and as a <code>&lt;link&gt;</code> in the HTML head."
+"MCP Server Card","MCP Server Card"
+"Link to .well-known/mcp/server-card.json (rel=describedby), the card of the shop's MCP server.","Link to .well-known/mcp/server-card.json (rel=describedby), the card of the shop's MCP server."
+"Sitemap URL","Sitemap URL"
+"URL of the XML sitemap (rel=sitemap), for example sitemap.xml. A relative URL is taken from the base URL. Empty sends no sitemap link.","URL of the XML sitemap (rel=sitemap), for example sitemap.xml. A relative URL is taken from the base URL. Empty sends no sitemap link."
+"Link to the Markdown version of the page itself (rel=alternate, type=text/markdown). Only when the Markdown version is on.","Link to the Markdown version of the page itself (rel=alternate, type=text/markdown). Only when the Markdown version is on."
+Advanced,Advanced
+"Not for logged-in customers","Not for logged-in customers"
+"Logged-in customers always get HTML, so personal content never ends up in a Markdown answer.","Logged-in customers always get HTML, so personal content never ends up in a Markdown answer."
+"Not for noindex pages","Not for noindex pages"
+"Pages with noindex in their robots meta tag or X-Robots-Tag header stay HTML.","Pages with noindex in their robots meta tag or X-Robots-Tag header stay HTML."
+"Vary: Accept on HTML","Vary: Accept on HTML"
+"Also send Vary: Accept with HTML pages, so a proxy or CDN keeps the HTML and the Markdown version apart.","Also send Vary: Accept with HTML pages, so a proxy or CDN keeps the HTML and the Markdown version apart."
+"Content-Signal header","Content-Signal header"
+"Optional Content-Signal header on the Markdown answer (see contentsignals.org), e.g. <code>search=yes, ai-input=yes, ai-train=no</code>. A Content-Signal already on the response is kept. Empty sends none.","Optional Content-Signal header on the Markdown answer (see contentsignals.org), e.g. <code>search=yes, ai-input=yes, ai-train=no</code>. A Content-Signal already on the response is kept. Empty sends none."
+"Auto (when the file exists in pub/)","Auto (when the file exists in pub/)"
+Yes,Yes
+No,No

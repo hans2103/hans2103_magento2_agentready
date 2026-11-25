@@ -1,0 +1,30 @@
+{
+    "name": "hans2103/magento2-agentready",
+    "description": "Agent Ready for Magento 2: Markdown for Agents (Accept: text/markdown) and agent discovery Link headers, per store view.",
+    "type": "magento2-module",
+    "license": "GPL-2.0-or-later",
+    "keywords": ["magento2", "markdown", "llms.txt", "ai", "agents", "link header"],
+    "homepage": "https://github.com/hans2103/hans2103_magento2_agentready",
+    "authors": [
+        {
+            "name": "Hans Kuijpers",
+            "homepage": "https://hkweb.nl"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "ext-dom": "*",
+        "ext-libxml": "*",
+        "ext-mbstring": "*",
+        "league/html-to-markdown": "^5.2",
+        "magento/framework": "^103.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Hans2103\\AgentReady\\": ""
+        }
+    }
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Magento\Framework\View\Element\Template" name="hans2103.agentready.ai_catalog" template="Hans2103_AgentReady::head/ai-catalog.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Hans2103\AgentReady\ViewModel\AiCatalog</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

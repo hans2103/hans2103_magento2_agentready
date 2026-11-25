@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <agentready>
+            <markdown>
+                <enabled>1</enabled>
+                <content_selector>main, [role=main], #maincontent, article, body</content_selector>
+                <remove_selectors>script, style, noscript, template, svg, canvas, iframe, object, embed, form, button, input, select, textarea, nav, dialog, [hidden], [aria-hidden=true], .sidebar, .messages, .toolbar</remove_selectors>
+                <frontmatter>1</frontmatter>
+                <jsonld>1</jsonld>
+            </markdown>
+            <links>
+                <enabled>1</enabled>
+                <llms>auto</llms>
+                <agent_skills>auto</agent_skills>
+                <ai_catalog>auto</ai_catalog>
+                <mcp_server_card>auto</mcp_server_card>
+                <sitemap_url/>
+                <markdown>1</markdown>
+            </links>
+            <advanced>
+                <skip_logged_in>1</skip_logged_in>
+                <skip_noindex>1</skip_noindex>
+                <vary_html>1</vary_html>
+                <content_signal/>
+            </advanced>
+        </agentready>
+    </default>
+</config>

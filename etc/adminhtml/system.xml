@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="agentready" translate="label" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Agent Ready</label>
+            <tab>general</tab>
+            <resource>Hans2103_AgentReady::config</resource>
+            <group id="markdown" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Markdown</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Markdown version</label>
+                    <comment><![CDATA[Answer requests with <code>Accept: text/markdown</code> with a Markdown version of the page (Markdown for Agents). HTML stays the default.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="content_selector" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Main content</label>
+                    <comment><![CDATA[CSS selectors for the element that holds the main content, separated by commas. The first one that matches is used. Supported: tag, #id, .class, [attribute] and [attribute=value], combined with a space or &gt;.]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="remove_selectors" translate="label comment" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Leave out</label>
+                    <comment>CSS selectors of elements inside the main content that stay out of the Markdown, separated by commas: scripts, menus, forms, the sidebar. JSON-LD is always kept and added at the end.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="frontmatter" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Frontmatter</label>
+                    <comment>Start the Markdown with a YAML block holding the title, description and image of the page.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="jsonld" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>JSON-LD</label>
+                    <comment>Add the structured data (JSON-LD) of the page at the end, in one json code block.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="links" translate="label comment" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Link headers</label>
+                <comment><![CDATA["Auto" links a file only when it exists in the web root (pub/). Choose "Yes" for a file a module serves through a route.]]></comment>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Link headers</label>
+                    <comment>Send Link headers (RFC 8288) with HTML pages that point agents to the files below. Link headers already on the response are kept.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="llms" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>llms.txt</label>
+                    <comment>Link to llms.txt (rel=describedby).</comment>
+                    <source_model>Hans2103\AgentReady\Model\Config\Source\LinkMode</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="agent_skills" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Agent skills index</label>
+                    <comment>Link to .well-known/agent-skills/index.json (rel=describedby).</comment>
+                    <source_model>Hans2103\AgentReady\Model\Config\Source\LinkMode</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="ai_catalog" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>AI catalog (ARD)</label>
+                    <comment><![CDATA[Link to .well-known/ai-catalog.json (rel=ai-catalog), the Agentic Resource Discovery manifest: in the Link header and as a <code>&lt;link&gt;</code> in the HTML head.]]></comment>
+                    <source_model>Hans2103\AgentReady\Model\Config\Source\LinkMode</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="mcp_server_card" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>MCP Server Card</label>
+                    <comment>Link to .well-known/mcp/server-card.json (rel=describedby), the card of the shop's MCP server.</comment>
+                    <source_model>Hans2103\AgentReady\Model\Config\Source\LinkMode</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="sitemap_url" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sitemap URL</label>
+                    <comment>URL of the XML sitemap (rel=sitemap), for example sitemap.xml. A relative URL is taken from the base URL. Empty sends no sitemap link.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="markdown" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Markdown version</label>
+                    <comment>Link to the Markdown version of the page itself (rel=alternate, type=text/markdown). Only when the Markdown version is on.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="advanced" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Advanced</label>
+                <field id="skip_logged_in" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Not for logged-in customers</label>
+                    <comment>Logged-in customers always get HTML, so personal content never ends up in a Markdown answer.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="skip_noindex" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Not for noindex pages</label>
+                    <comment>Pages with noindex in their robots meta tag or X-Robots-Tag header stay HTML.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="vary_html" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Vary: Accept on HTML</label>
+                    <comment>Also send Vary: Accept with HTML pages, so a proxy or CDN keeps the HTML and the Markdown version apart.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="content_signal" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Content-Signal header</label>
+                    <comment><![CDATA[Optional Content-Signal header on the Markdown answer (see contentsignals.org), e.g. <code>search=yes, ai-input=yes, ai-train=no</code>. A Content-Signal already on the response is kept. Empty sends none.]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

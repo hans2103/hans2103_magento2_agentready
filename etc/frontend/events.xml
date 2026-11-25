@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!-- Runs on every front-end response, also one the built-in page cache serves. -->
+    <event name="controller_front_send_response_before">
+        <observer name="hans2103_agentready_process_response" instance="Hans2103\AgentReady\Observer\ProcessResponse"/>
+    </event>
+</config>

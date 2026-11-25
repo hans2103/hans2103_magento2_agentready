@@ -1,0 +1,38 @@
+"Agent Ready","Agent Ready"
+Markdown,Markdown
+"Markdown version",Markdown-versie
+"Answer requests with <code>Accept: text/markdown</code> with a Markdown version of the page (Markdown for Agents). HTML stays the default.","Beantwoord verzoeken met <code>Accept: text/markdown</code> met een Markdown-versie van de pagina (Markdown for Agents). HTML blijft de standaard."
+"Main content",Hoofdinhoud
+"CSS selectors for the element that holds the main content, separated by commas. The first one that matches is used. Supported: tag, #id, .class, [attribute] and [attribute=value], combined with a space or &gt;.","CSS-selectors voor het element met de hoofdinhoud, gescheiden door komma's. De eerste die past wordt gebruikt. Ondersteund: tag, #id, .class, [attribuut] en [attribuut=waarde], gecombineerd met een spatie of &gt;."
+"Leave out",Weglaten
+"CSS selectors of elements inside the main content that stay out of the Markdown, separated by commas: scripts, menus, forms, the sidebar. JSON-LD is always kept and added at the end.","CSS-selectors van elementen in de hoofdinhoud die niet in de Markdown komen, gescheiden door komma's: scripts, menu's, formulieren, de zijbalk. JSON-LD blijft altijd bewaard en komt aan het eind."
+Frontmatter,Frontmatter
+"Start the Markdown with a YAML block holding the title, description and image of the page.","Begin de Markdown met een YAML-blok met de titel, beschrijving en afbeelding van de pagina."
+JSON-LD,JSON-LD
+"Add the structured data (JSON-LD) of the page at the end, in one json code block.","Voeg de gestructureerde data (JSON-LD) van de pagina aan het eind toe, in één json-codeblok."
+"Link headers",Link-headers
+"""Auto"" links a file only when it exists in the web root (pub/). Choose ""Yes"" for a file a module serves through a route.","""Automatisch"" linkt een bestand alleen als het in de webroot (pub/) staat. Kies ""Ja"" voor een bestand dat een module via een route serveert."
+"Send Link headers (RFC 8288) with HTML pages that point agents to the files below. Link headers already on the response are kept.","Stuur Link-headers (RFC 8288) mee met HTML-pagina's die agents naar de bestanden hieronder wijzen. Link-headers die al op het antwoord staan blijven bewaard."
+llms.txt,llms.txt
+"Link to llms.txt (rel=describedby).","Link naar llms.txt (rel=describedby)."
+"Agent skills index","Index van agent skills"
+"Link to .well-known/agent-skills/index.json (rel=describedby).","Link naar .well-known/agent-skills/index.json (rel=describedby)."
+"AI catalog (ARD)","AI-catalogus (ARD)"
+"Link to .well-known/ai-catalog.json (rel=ai-catalog), the Agentic Resource Discovery manifest: in the Link header and as a <code>&lt;link&gt;</code> in the HTML head.","Link naar .well-known/ai-catalog.json (rel=ai-catalog), het Agentic Resource Discovery-manifest: in de Link-header en als <code>&lt;link&gt;</code> in de HTML-head."
+"MCP Server Card","MCP Server Card"
+"Link to .well-known/mcp/server-card.json (rel=describedby), the card of the shop's MCP server.","Link naar .well-known/mcp/server-card.json (rel=describedby), de kaart van de MCP-server van de winkel."
+"Sitemap URL",Sitemap-URL
+"URL of the XML sitemap (rel=sitemap), for example sitemap.xml. A relative URL is taken from the base URL. Empty sends no sitemap link.","URL van de XML-sitemap (rel=sitemap), bijvoorbeeld sitemap.xml. Een relatieve URL gaat uit van de basis-URL. Leeg stuurt geen sitemap-link."
+"Link to the Markdown version of the page itself (rel=alternate, type=text/markdown). Only when the Markdown version is on.","Link naar de Markdown-versie van de pagina zelf (rel=alternate, type=text/markdown). Alleen als de Markdown-versie aan staat."
+Advanced,Geavanceerd
+"Not for logged-in customers","Niet voor ingelogde klanten"
+"Logged-in customers always get HTML, so personal content never ends up in a Markdown answer.","Ingelogde klanten krijgen altijd HTML, zodat persoonlijke inhoud nooit in een Markdown-antwoord belandt."
+"Not for noindex pages","Niet voor noindex-pagina's"
+"Pages with noindex in their robots meta tag or X-Robots-Tag header stay HTML.","Pagina's met noindex in hun robots-metatag of X-Robots-Tag-header blijven HTML."
+"Vary: Accept on HTML","Vary: Accept bij HTML"
+"Also send Vary: Accept with HTML pages, so a proxy or CDN keeps the HTML and the Markdown version apart.","Stuur Vary: Accept ook mee met HTML-pagina's, zodat een proxy of CDN de HTML- en de Markdown-versie uit elkaar houdt."
+"Content-Signal header",Content-Signal-header
+"Optional Content-Signal header on the Markdown answer (see contentsignals.org), e.g. <code>search=yes, ai-input=yes, ai-train=no</code>. A Content-Signal already on the response is kept. Empty sends none.","Optionele Content-Signal-header op het Markdown-antwoord (zie contentsignals.org), bijv. <code>search=yes, ai-input=yes, ai-train=no</code>. Een Content-Signal die al op het antwoord staat blijft bewaard. Leeg stuurt er geen."
+"Auto (when the file exists in pub/)","Automatisch (als het bestand in pub/ staat)"
+Yes,Ja
+No,Nee

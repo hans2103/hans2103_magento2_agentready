@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * Agent Ready for Magento 2
+ *
+ * @copyright  (C) 2026 Hans Kuijpers <https://hkweb.nl>
+ * @license    GPL-2.0-or-later; see LICENSE.txt
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+declare(strict_types=1);
+
+/** @var \Hans2103\AgentReady\ViewModel\AiCatalog $viewModel */
+$viewModel = $block->getData('view_model');
+$href      = $viewModel->getHref();
+?>
+<?php if ($href !== null): ?>
+<link rel="ai-catalog" href="<?= $escaper->escapeUrl($href) ?>" type="application/json">
+<?php endif; ?>
