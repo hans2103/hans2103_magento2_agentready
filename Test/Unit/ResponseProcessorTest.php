@@ -66,6 +66,25 @@ final class ResponseProcessorTest extends TestCase
         self::assertSame([], $noVary?->set);
     }
 
+    public function testNoMarkdownLinkWhereNoMarkdown(): void
+    {
+        $settings  = new Settings(markdown: true, linkHeaders: true);
+        $alternate = '<https://shop.example.com/stoel.html>; rel="alternate"; type="text/markdown"';
+        $links     = [self::LINK, $alternate];
+        $noindex   = str_replace('INDEX,FOLLOW', 'NOINDEX,NOFOLLOW', self::HTML);
+
+        self::assertSame(self::LINK . ', ' . $alternate, ResponseProcessor::process($settings, self::page('text/html'), $links)?->set['Link'] ?? null, 'normal page');
+
+        foreach ([
+            'cart'          => self::page('text/html', action: 'checkout_cart_index'),
+            'logged in'     => self::page('text/html', loggedIn: true),
+            'noindex meta'  => self::page('text/html', body: $noindex),
+            'X-Robots-Tag'  => self::page('text/html', headers: ['x-robots-tag' => ['noindex']]),
+        ] as $label => $page) {
+            self::assertSame(self::LINK, ResponseProcessor::process($settings, $page, $links)?->set['Link'] ?? null, $label);
+        }
+    }
+
     public function testStaysHtml(): void
     {
         $settings = new Settings(markdown: true, linkHeaders: true);
