@@ -112,6 +112,10 @@
                     <comment>Pages with noindex in their robots meta tag or X-Robots-Tag header stay HTML.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="skip_actions" translate="label comment" type="textarea" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Also leave out (full action names)</label>
+                    <comment><![CDATA[Pages that stay HTML besides cart, checkout, customer account, orders, wishlist and contact, which always do. Full action names separated by commas or new lines, e.g. <code>cms_page_view</code>; <code>*</code> at the end matches every action that starts with it, e.g. <code>review_*</code>.]]></comment>
+                </field>
                 <field id="vary_html" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Vary: Accept on HTML</label>
                     <comment>Also send Vary: Accept with HTML pages, so a proxy or CDN keeps the HTML and the Markdown version apart.</comment>

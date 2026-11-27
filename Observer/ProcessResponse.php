@@ -90,6 +90,7 @@ class ProcessResponse implements ObserverInterface
             $this->headers($response),
             $pageUrl,
             (bool) $this->httpContext->getValue(self::CONTEXT_AUTH),
+            (string) $request->getFullActionName(),
         );
 
         if (!ResponseProcessor::isHtmlPage($page)) {

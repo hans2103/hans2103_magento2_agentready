@@ -2,6 +2,15 @@
 
 All notable changes to this module. Versions follow calendar versioning `YY.WW.PATCH`.
 
+## 26.48.3
+
+**Upgrade note:** Markdown and Link headers are now off after installation. A store that relied on the old default (no value saved in the admin) loses both after upgrading; switch them on under **Stores > Configuration > General > Agent Ready**, or with `bin/magento config:set agentready/markdown/enabled 1` and `bin/magento config:set agentready/links/enabled 1`, before or right after upgrading.
+
+- Cart, checkout, customer account, order, wishlist and contact pages always get HTML (`checkout_*`, `multishipping_*`, `customer_*`, `sales_*`, `wishlist_*`, `contact_*`). A new setting, **Also leave out (full action names)**, adds more pages; `*` at the end matches a prefix.
+- The frontmatter has the page's canonical URL (`url`, from `<link rel="canonical">` or `og:url`, made absolute) and language (`lang`, from `<html lang>`).
+- Markdown and Link headers are off by default.
+- README: Magento answers a Magewire or Web API request with only `Accept: text/markdown` with HTTP 500; the module does not touch POST requests.
+
 ## 26.48.2
 
 Release process only; the module code is unchanged from 26.48.1.

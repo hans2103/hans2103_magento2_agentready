@@ -61,6 +61,7 @@ class Config
             linkMarkdown: $this->flag('links/markdown', $store),
             skipLoggedIn: $this->flag('advanced/skip_logged_in', $store),
             skipNoindex: $this->flag('advanced/skip_noindex', $store),
+            skipActions: $this->value('advanced/skip_actions', $store),
             varyHtml: $this->flag('advanced/vary_html', $store),
             contentSignal: $this->value('advanced/content_signal', $store),
         );

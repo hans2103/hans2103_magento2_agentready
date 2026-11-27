@@ -48,18 +48,19 @@ final readonly class Settings
      * @param   boolean  $linkMarkdown     Link to the Markdown version of the page
      * @param   boolean  $skipLoggedIn     Logged-in customers always get HTML
      * @param   boolean  $skipNoindex      Pages with noindex stay HTML
+     * @param   string   $skipActions      Extra full action names that stay HTML (see ExcludedPages)
      * @param   boolean  $varyHtml         Send Vary: Accept with HTML pages too
      * @param   string   $contentSignal    Content-Signal header for the Markdown answer ('' = none)
      *
      * @since   26.48.0
      */
     public function __construct(
-        public bool $markdown = true,
+        public bool $markdown = false,
         public string $contentSelector = self::DEFAULT_CONTENT_SELECTOR,
         public string $removeSelectors = self::DEFAULT_REMOVE_SELECTORS,
         public bool $frontmatter = true,
         public bool $jsonLd = true,
-        public bool $linkHeaders = true,
+        public bool $linkHeaders = false,
         public string $linkLlms = DiscoveryLinks::MODE_AUTO,
         public string $linkAgentSkills = DiscoveryLinks::MODE_AUTO,
         public string $linkAiCatalog = DiscoveryLinks::MODE_AUTO,
@@ -68,6 +69,7 @@ final readonly class Settings
         public bool $linkMarkdown = true,
         public bool $skipLoggedIn = true,
         public bool $skipNoindex = true,
+        public string $skipActions = '',
         public bool $varyHtml = true,
         public string $contentSignal = '',
     ) {

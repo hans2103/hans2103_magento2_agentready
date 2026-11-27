@@ -29,6 +29,8 @@ Advanced,Advanced
 "Logged-in customers always get HTML, so personal content never ends up in a Markdown answer.","Logged-in customers always get HTML, so personal content never ends up in a Markdown answer."
 "Not for noindex pages","Not for noindex pages"
 "Pages with noindex in their robots meta tag or X-Robots-Tag header stay HTML.","Pages with noindex in their robots meta tag or X-Robots-Tag header stay HTML."
+"Also leave out (full action names)","Also leave out (full action names)"
+"Pages that stay HTML besides cart, checkout, customer account, orders, wishlist and contact, which always do. Full action names separated by commas or new lines, e.g. <code>cms_page_view</code>; <code>*</code> at the end matches every action that starts with it, e.g. <code>review_*</code>.","Pages that stay HTML besides cart, checkout, customer account, orders, wishlist and contact, which always do. Full action names separated by commas or new lines, e.g. <code>cms_page_view</code>; <code>*</code> at the end matches every action that starts with it, e.g. <code>review_*</code>."
 "Vary: Accept on HTML","Vary: Accept on HTML"
 "Also send Vary: Accept with HTML pages, so a proxy or CDN keeps the HTML and the Markdown version apart.","Also send Vary: Accept with HTML pages, so a proxy or CDN keeps the HTML and the Markdown version apart."
 "Content-Signal header","Content-Signal header"

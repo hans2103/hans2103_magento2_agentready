@@ -29,6 +29,8 @@ Advanced,Geavanceerd
 "Logged-in customers always get HTML, so personal content never ends up in a Markdown answer.","Ingelogde klanten krijgen altijd HTML, zodat persoonlijke inhoud nooit in een Markdown-antwoord belandt."
 "Not for noindex pages","Niet voor noindex-pagina's"
 "Pages with noindex in their robots meta tag or X-Robots-Tag header stay HTML.","Pagina's met noindex in hun robots-metatag of X-Robots-Tag-header blijven HTML."
+"Also leave out (full action names)","Ook overslaan (full action names)"
+"Pages that stay HTML besides cart, checkout, customer account, orders, wishlist and contact, which always do. Full action names separated by commas or new lines, e.g. <code>cms_page_view</code>; <code>*</code> at the end matches every action that starts with it, e.g. <code>review_*</code>.","Pagina's die HTML blijven naast winkelwagen, checkout, klantaccount, bestellingen, verlanglijst en contact, die dat altijd doen. Full action names gescheiden door komma's of nieuwe regels, bijv. <code>cms_page_view</code>; <code>*</code> aan het eind past op elke action die ermee begint, bijv. <code>review_*</code>."
 "Vary: Accept on HTML","Vary: Accept bij HTML"
 "Also send Vary: Accept with HTML pages, so a proxy or CDN keeps the HTML and the Markdown version apart.","Stuur Vary: Accept ook mee met HTML-pagina's, zodat een proxy of CDN de HTML- en de Markdown-versie uit elkaar houdt."
 "Content-Signal header",Content-Signal-header

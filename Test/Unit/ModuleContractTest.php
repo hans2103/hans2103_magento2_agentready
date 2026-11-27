@@ -106,6 +106,9 @@ final class ModuleContractTest extends TestCase
         $defaults = self::defaults();
         $settings = new Settings();
 
+        self::assertFalse($settings->markdown, 'Markdown is off after installation');
+        self::assertFalse($settings->linkHeaders, 'Link headers are off after installation');
+
         self::assertSame(Settings::DEFAULT_CONTENT_SELECTOR, $defaults['markdown/content_selector']);
         self::assertSame(Settings::DEFAULT_REMOVE_SELECTORS, $defaults['markdown/remove_selectors']);
 
@@ -122,6 +125,7 @@ final class ModuleContractTest extends TestCase
             'links/markdown'          => $settings->linkMarkdown,
             'advanced/skip_logged_in' => $settings->skipLoggedIn,
             'advanced/skip_noindex'   => $settings->skipNoindex,
+            'advanced/skip_actions'   => $settings->skipActions,
             'advanced/vary_html'      => $settings->varyHtml,
             'advanced/content_signal' => $settings->contentSignal,
         ];

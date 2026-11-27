@@ -25,7 +25,7 @@ final class DiscoveryLinksTest extends TestCase
 
     public function testAutoLinksOnlyExistingFiles(): void
     {
-        $links = DiscoveryLinks::build(new Settings(), self::BASE, self::PAGE, static fn (string $path): bool => $path === DiscoveryLinks::LLMS);
+        $links = DiscoveryLinks::build(new Settings(markdown: true, linkHeaders: true), self::BASE, self::PAGE, static fn (string $path): bool => $path === DiscoveryLinks::LLMS);
 
         self::assertSame([
             '<https://shop.example.com/llms.txt>; rel="describedby"; type="text/markdown"',
@@ -36,6 +36,8 @@ final class DiscoveryLinksTest extends TestCase
     public function testAllLinksInOrder(): void
     {
         $settings = new Settings(
+            markdown: true,
+            linkHeaders: true,
             linkLlms: DiscoveryLinks::MODE_YES,
             linkAgentSkills: DiscoveryLinks::MODE_YES,
             linkAiCatalog: DiscoveryLinks::MODE_YES,
@@ -57,22 +59,22 @@ final class DiscoveryLinksTest extends TestCase
     {
         $exists = static fn (): bool => true;
 
-        $no = new Settings(linkLlms: '0', linkAgentSkills: '0', linkAiCatalog: '0', linkMcpServerCard: '0', linkMarkdown: false);
+        $no = new Settings(markdown: true, linkHeaders: true, linkLlms: '0', linkAgentSkills: '0', linkAiCatalog: '0', linkMcpServerCard: '0', linkMarkdown: false);
         self::assertSame([], DiscoveryLinks::build($no, self::BASE, self::PAGE, $exists));
 
-        self::assertSame([], DiscoveryLinks::build(new Settings(linkHeaders: false), self::BASE, self::PAGE, $exists));
+        self::assertSame([], DiscoveryLinks::build(new Settings(markdown: true, linkHeaders: false), self::BASE, self::PAGE, $exists));
 
-        $noMarkdown = DiscoveryLinks::build(new Settings(markdown: false, linkLlms: '0', linkAgentSkills: '0', linkAiCatalog: '0', linkMcpServerCard: '0'), self::BASE, self::PAGE, $exists);
+        $noMarkdown = DiscoveryLinks::build(new Settings(linkHeaders: true, markdown: false, linkLlms: '0', linkAgentSkills: '0', linkAiCatalog: '0', linkMcpServerCard: '0'), self::BASE, self::PAGE, $exists);
         self::assertSame([], $noMarkdown, 'no Markdown alternate when the Markdown version is off');
 
-        $sitemap = DiscoveryLinks::build(new Settings(linkLlms: '0', linkAgentSkills: '0', linkAiCatalog: '0', linkMcpServerCard: '0', sitemapUrl: 'https://cdn.example.com/s.xml', linkMarkdown: false), self::BASE, self::PAGE, $exists);
+        $sitemap = DiscoveryLinks::build(new Settings(markdown: true, linkHeaders: true, linkLlms: '0', linkAgentSkills: '0', linkAiCatalog: '0', linkMcpServerCard: '0', sitemapUrl: 'https://cdn.example.com/s.xml', linkMarkdown: false), self::BASE, self::PAGE, $exists);
         self::assertSame(['<https://cdn.example.com/s.xml>; rel="sitemap"; type="application/xml"'], $sitemap);
     }
 
     public function testAiCatalogUrl(): void
     {
-        self::assertSame('https://shop.example.com/.well-known/ai-catalog.json', DiscoveryLinks::aiCatalogUrl(new Settings(), self::BASE, static fn (): bool => true));
-        self::assertNull(DiscoveryLinks::aiCatalogUrl(new Settings(), self::BASE, static fn (): bool => false));
-        self::assertNull(DiscoveryLinks::aiCatalogUrl(new Settings(linkHeaders: false, linkAiCatalog: '1'), self::BASE, static fn (): bool => true));
+        self::assertSame('https://shop.example.com/.well-known/ai-catalog.json', DiscoveryLinks::aiCatalogUrl(new Settings(markdown: true, linkHeaders: true), self::BASE, static fn (): bool => true));
+        self::assertNull(DiscoveryLinks::aiCatalogUrl(new Settings(markdown: true, linkHeaders: true), self::BASE, static fn (): bool => false));
+        self::assertNull(DiscoveryLinks::aiCatalogUrl(new Settings(markdown: true, linkHeaders: false, linkAiCatalog: '1'), self::BASE, static fn (): bool => true));
     }
 }

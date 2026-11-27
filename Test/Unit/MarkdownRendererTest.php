@@ -37,6 +37,9 @@ final class MarkdownRendererTest extends TestCase
 
         self::assertStringStartsWith("---\ntitle: \"Say \\\"hi\\\" — ok\"\ndescription: \"D\"\n---\n\n# Café\n", $md);
         self::assertStringContainsString('**bold**', $md);
+
+        $full = MarkdownRenderer::render(new ExtractedPage(['image' => 'https://e.test/i.png', 'lang' => 'nl', 'url' => 'https://e.test/p', 'title' => 'T'], '<p>B</p>', []));
+        self::assertStringStartsWith("---\ntitle: \"T\"\nurl: \"https://e.test/p\"\nlang: \"nl\"\nimage: \"https://e.test/i.png\"\n---\n\nB\n", $full);
         self::assertStringContainsString('[a link](https://example.com/x)', $md);
         self::assertStringContainsString("- One\n- Two\n    - Nested", $md);
         self::assertStringContainsString('| A | B |', $md);
