@@ -19,6 +19,14 @@ bin/magento setup:upgrade
 bin/magento cache:flush
 ```
 
+Both features are off after installation. Switch on **Markdown version** and **Link headers** in the admin, or for a store view:
+
+```bash
+bin/magento config:set --scope=stores --scope-code=default agentready/markdown/enabled 1
+bin/magento config:set --scope=stores --scope-code=default agentready/links/enabled 1
+bin/magento cache:flush
+```
+
 Flush the full page cache (and Varnish, if you use it) after installing or changing settings: the Link headers are added on the way out, but cached pages hold the `<link rel="ai-catalog">` in their head.
 
 ## Try it
@@ -32,11 +40,11 @@ curl -sI https://shop.example.com/ | grep -iE '^(link|vary):'
 
 | Group | Setting | Default |
 |---|---|---|
-| Markdown | Markdown version | Yes |
+| Markdown | Markdown version | No |
 | | Main content (CSS selectors, first match wins) | `main, [role=main], #maincontent, article, body` |
 | | Leave out (CSS selectors) | scripts, media, forms, `nav`, hidden elements, `.sidebar`, `.messages`, `.toolbar` |
 | | Frontmatter / JSON-LD | Yes / Yes |
-| Link headers | Link headers | Yes |
+| Link headers | Link headers | No |
 | | llms.txt, agent skills index, AI catalog, MCP Server Card | Auto |
 | | Sitemap URL | empty (no link) |
 | | Markdown version (rel=alternate) | Yes |

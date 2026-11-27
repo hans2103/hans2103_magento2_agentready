@@ -106,6 +106,9 @@ final class ModuleContractTest extends TestCase
         $defaults = self::defaults();
         $settings = new Settings();
 
+        self::assertFalse($settings->markdown, 'Markdown is off after installation');
+        self::assertFalse($settings->linkHeaders, 'Link headers are off after installation');
+
         self::assertSame(Settings::DEFAULT_CONTENT_SELECTOR, $defaults['markdown/content_selector']);
         self::assertSame(Settings::DEFAULT_REMOVE_SELECTORS, $defaults['markdown/remove_selectors']);
 

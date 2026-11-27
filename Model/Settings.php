@@ -55,12 +55,12 @@ final readonly class Settings
      * @since   26.48.0
      */
     public function __construct(
-        public bool $markdown = true,
+        public bool $markdown = false,
         public string $contentSelector = self::DEFAULT_CONTENT_SELECTOR,
         public string $removeSelectors = self::DEFAULT_REMOVE_SELECTORS,
         public bool $frontmatter = true,
         public bool $jsonLd = true,
-        public bool $linkHeaders = true,
+        public bool $linkHeaders = false,
         public string $linkLlms = DiscoveryLinks::MODE_AUTO,
         public string $linkAgentSkills = DiscoveryLinks::MODE_AUTO,
         public string $linkAiCatalog = DiscoveryLinks::MODE_AUTO,

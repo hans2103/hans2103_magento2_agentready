@@ -38,7 +38,7 @@ final class ResponseProcessorTest extends TestCase
 
     public function testMarkdownAnswer(): void
     {
-        $changes = ResponseProcessor::process(new Settings(contentSignal: 'search=yes'), self::page(headers: ['vary' => ['Accept-Encoding']]), [self::LINK]);
+        $changes = ResponseProcessor::process(new Settings(markdown: true, linkHeaders: true, contentSignal: 'search=yes'), self::page(headers: ['vary' => ['Accept-Encoding']]), [self::LINK]);
 
         self::assertNotNull($changes);
         self::assertSame("---\ntitle: \"Stoel\"\n---\n\n# Stoel\n\nVan eikenhout.\n\n```json\n{\"@type\":\"Product\"}\n```\n", $changes->body);
@@ -52,34 +52,34 @@ final class ResponseProcessorTest extends TestCase
 
     public function testHtmlAnswer(): void
     {
-        $changes = ResponseProcessor::process(new Settings(), self::page('text/html,*/*;q=0.8', headers: ['link' => ['</a.css>; rel=preload']]), [self::LINK]);
+        $changes = ResponseProcessor::process(new Settings(markdown: true, linkHeaders: true), self::page('text/html,*/*;q=0.8', headers: ['link' => ['</a.css>; rel=preload']]), [self::LINK]);
 
         self::assertNotNull($changes);
         self::assertNull($changes->body);
         self::assertSame(['Vary' => 'Accept', 'Link' => '</a.css>; rel=preload, ' . self::LINK], $changes->set);
         self::assertSame([], $changes->remove);
 
-        $plain = ResponseProcessor::process(new Settings(markdown: false), self::page(), [self::LINK]);
+        $plain = ResponseProcessor::process(new Settings(linkHeaders: true, markdown: false), self::page(), [self::LINK]);
         self::assertSame(['Link' => self::LINK], $plain?->set, 'Markdown off: no conversion, no Vary');
 
-        $noVary = ResponseProcessor::process(new Settings(varyHtml: false, linkHeaders: false), self::page('text/html'), [self::LINK]);
+        $noVary = ResponseProcessor::process(new Settings(markdown: true, varyHtml: false, linkHeaders: false), self::page('text/html'), [self::LINK]);
         self::assertSame([], $noVary?->set);
     }
 
     public function testStaysHtml(): void
     {
-        $settings = new Settings();
+        $settings = new Settings(markdown: true, linkHeaders: true);
 
         self::assertNull(ResponseProcessor::process($settings, self::page(loggedIn: true), [])?->body, 'logged in');
         self::assertNull(ResponseProcessor::process($settings, self::page(action: 'checkout_cart_index'), [])?->body, 'cart');
-        self::assertNull(ResponseProcessor::process(new Settings(skipActions: 'catalog_product_*'), self::page(), [])?->body, 'extra exclusion');
+        self::assertNull(ResponseProcessor::process(new Settings(markdown: true, linkHeaders: true, skipActions: 'catalog_product_*'), self::page(), [])?->body, 'extra exclusion');
         self::assertSame('Accept', ResponseProcessor::process($settings, self::page(action: 'checkout_cart_index'), [])?->set['Vary'] ?? null, 'cart keeps Vary');
-        self::assertNotNull(ResponseProcessor::process(new Settings(skipLoggedIn: false), self::page(loggedIn: true), [])?->body, 'logged in allowed');
+        self::assertNotNull(ResponseProcessor::process(new Settings(markdown: true, linkHeaders: true, skipLoggedIn: false), self::page(loggedIn: true), [])?->body, 'logged in allowed');
 
         $noindex = str_replace('INDEX,FOLLOW', 'NOINDEX,NOFOLLOW', self::HTML);
         self::assertNull(ResponseProcessor::process($settings, self::page(body: $noindex), [])?->body, 'noindex meta');
         self::assertNull(ResponseProcessor::process($settings, self::page(headers: ['x-robots-tag' => ['none']]), [])?->body, 'X-Robots-Tag');
-        self::assertNotNull(ResponseProcessor::process(new Settings(skipNoindex: false), self::page(body: $noindex), [])?->body);
+        self::assertNotNull(ResponseProcessor::process(new Settings(markdown: true, linkHeaders: true, skipNoindex: false), self::page(body: $noindex), [])?->body);
 
         $empty = '<html><body><main></main></body></html>';
         $changes = ResponseProcessor::process($settings, self::page(body: $empty), [self::LINK]);
@@ -89,7 +89,7 @@ final class ResponseProcessorTest extends TestCase
 
     public function testNotAnHtmlPage(): void
     {
-        $settings = new Settings();
+        $settings = new Settings(markdown: true, linkHeaders: true);
 
         self::assertNull(ResponseProcessor::process($settings, self::page(method: 'POST'), []));
         self::assertNull(ResponseProcessor::process($settings, self::page(status: 404), []));
