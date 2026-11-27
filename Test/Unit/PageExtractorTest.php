@@ -32,6 +32,8 @@ final class PageExtractorTest extends TestCase
 <meta name="description" content="  Real
  description ">
 <meta property="og:image" content="https://example.com/i.png">
+<meta property="og:url" content="https://example.com/og">
+<link rel="canonical" href="/en/page">
 <script type="application/ld+json">
  {"@type":"Organization"}
 </script>
@@ -57,7 +59,7 @@ HTML;
         $page = PageExtractor::extract($html, 'main, body', self::REMOVE, 'https://example.com/en/page');
 
         self::assertNotNull($page);
-        self::assertSame(['title' => 'OG title', 'description' => 'Real description', 'image' => 'https://example.com/i.png'], $page->meta);
+        self::assertSame(['title' => 'OG title', 'description' => 'Real description', 'url' => 'https://example.com/en/page', 'lang' => 'en', 'image' => 'https://example.com/i.png'], $page->meta);
         self::assertSame(['{"@type":"Organization"}', '{"@type":"Product"}'], $page->jsonLd);
         self::assertStringContainsString('<h1>Café — 🎄</h1>', $page->contentHtml);
         self::assertStringContainsString('href="https://example.com/more"', $page->contentHtml);
@@ -68,6 +70,18 @@ HTML;
         foreach (['Sub menu', 'Hidden notice', 'icon', 'Close', 'Compare products', 'alert(1)', 'Product', 'a comment', 'Cookies!', 'Menu</a>'] as $gone) {
             self::assertStringNotContainsString($gone, $page->contentHtml);
         }
+    }
+
+    public function testCanonicalUrl(): void
+    {
+        $absolute = PageExtractor::extract('<html><head><link rel="canonical" href="https://shop.test/p.html"></head><body>B</body></html>', 'body', '', 'https://example.com/p.html?utm=1');
+        self::assertSame(['url' => 'https://shop.test/p.html'], $absolute?->meta);
+
+        $og = PageExtractor::extract('<html><head><meta property="og:url" content="/og.html"></head><body>B</body></html>', 'body', '', 'https://example.com/x/');
+        self::assertSame(['url' => 'https://example.com/og.html'], $og?->meta);
+
+        $none = PageExtractor::extract('<html lang=" nl-NL "><head></head><body>B</body></html>', 'body', '', 'https://example.com/');
+        self::assertSame(['lang' => 'nl-NL'], $none?->meta);
     }
 
     public function testFallbacksAndOrder(): void
