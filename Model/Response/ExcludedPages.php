@@ -16,7 +16,7 @@ namespace Hans2103\AgentReady\Model\Response;
  * cart, checkout, customer account, contact, wishlist and order pages always stay HTML, plus
  * the names a store view adds. A name ending in * matches every action that starts with it.
  *
- * @since  26.49.0
+ * @since  26.48.3
  */
 final class ExcludedPages
 {
@@ -24,7 +24,7 @@ final class ExcludedPages
      * Always excluded.
      *
      * @var    list<string>
-     * @since  26.49.0
+     * @since  26.48.3
      */
     public const ALWAYS = [
         'checkout_*',
@@ -43,7 +43,7 @@ final class ExcludedPages
      *
      * @return  boolean
      *
-     * @since   26.49.0
+     * @since   26.48.3
      */
     public static function matches(string $actionName, string $extra = ''): bool
     {
@@ -71,7 +71,7 @@ final class ExcludedPages
      *
      * @return  list<string>
      *
-     * @since   26.49.0
+     * @since   26.48.3
      */
     private static function parse(string $value): array
     {

@@ -65,6 +65,10 @@ Only GET and HEAD requests with status 200 and an HTML body are touched. Markdow
 
 The Markdown answer has `Content-Type: text/markdown; charset=utf-8`, an `x-markdown-tokens` estimate and `Vary: Accept`, and no longer has the headers that describe the HTML body (`ETag`, `Last-Modified`, `Content-Length`, `Content-Encoding`, `Content-Range`, `Transfer-Encoding`).
 
+### Magewire and Web API requests
+
+Only GET and HEAD pages are converted; POST requests are left alone. Magento itself answers a request whose `Accept` header names no media type its Web API renderers know, such as `Accept: text/markdown` alone, with HTTP 500 (`Server cannot match any of the given Accept HTTP header media type(s)`). Magewire update requests (Hyvä Checkout) go through that renderer, so an agent that sends them with only `text/markdown` gets a 500, with or without this module. Seen on Magento 2.4.9; a normal browser or agent that also accepts `application/json` or `*/*` is not affected.
+
 ### Varnish and CDNs
 
 HTML pages get `Vary: Accept`, so a cache keeps the HTML and Markdown variants apart. Browsers send many different `Accept` values, so with Varnish that means one stored copy per distinct header. Better: give Markdown requests their own hash and set **Vary: Accept on HTML** to *No*. Add this inside the existing `sub vcl_hash` of your VCL, before any `return`:
