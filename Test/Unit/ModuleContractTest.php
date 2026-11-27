@@ -122,6 +122,7 @@ final class ModuleContractTest extends TestCase
             'links/markdown'          => $settings->linkMarkdown,
             'advanced/skip_logged_in' => $settings->skipLoggedIn,
             'advanced/skip_noindex'   => $settings->skipNoindex,
+            'advanced/skip_actions'   => $settings->skipActions,
             'advanced/vary_html'      => $settings->varyHtml,
             'advanced/content_signal' => $settings->contentSignal,
         ];

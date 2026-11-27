@@ -41,6 +41,7 @@ curl -sI https://shop.example.com/ | grep -iE '^(link|vary):'
 | | Sitemap URL | empty (no link) |
 | | Markdown version (rel=alternate) | Yes |
 | Advanced | Not for logged-in customers / Not for noindex pages | Yes / Yes |
+| | Also leave out (full action names) | empty |
 | | Vary: Accept on HTML | Yes |
 | | Content-Signal header | empty (none) |
 
@@ -52,7 +53,7 @@ The selectors support a small CSS subset: tag, `*`, `#id`, `.class`, `[attr]`, `
 
 The observer `Observer\ProcessResponse` listens to `controller_front_send_response_before` in the front-end area. That event also runs for a page the built-in page cache serves, so the cache keeps storing HTML and the Markdown is made from it on the way out.
 
-Only GET and HEAD requests with status 200 and an HTML body are touched. Markdown is chosen only when `text/markdown` is listed explicitly with a q-value at least as high as HTML's; wildcards never ask for Markdown. A page larger than 6 MiB, a page without matching content, a logged-in customer or a noindex page gets HTML.
+Only GET and HEAD requests with status 200 and an HTML body are touched. Markdown is chosen only when `text/markdown` is listed explicitly with a q-value at least as high as HTML's; wildcards never ask for Markdown. Cart, checkout, customer account, order, wishlist and contact pages (`checkout_*`, `multishipping_*`, `customer_*`, `sales_*`, `wishlist_*`, `contact_*`) always get HTML, as do the full action names in **Also leave out**. So does a page larger than 6 MiB, a page without matching content, a logged-in customer or a noindex page.
 
 The Markdown answer has `Content-Type: text/markdown; charset=utf-8`, an `x-markdown-tokens` estimate and `Vary: Accept`, and no longer has the headers that describe the HTML body (`ETag`, `Last-Modified`, `Content-Length`, `Content-Encoding`, `Content-Range`, `Transfer-Encoding`).
 

@@ -31,9 +31,9 @@ final class ResponseProcessorTest extends TestCase
     /**
      * @param  array<string, list<string>>  $headers
      */
-    private static function page(string $accept = 'text/markdown', string $body = self::HTML, array $headers = [], string $method = 'GET', int $status = 200, bool $loggedIn = false): PageResponse
+    private static function page(string $accept = 'text/markdown', string $body = self::HTML, array $headers = [], string $method = 'GET', int $status = 200, bool $loggedIn = false, string $action = 'catalog_product_view'): PageResponse
     {
-        return new PageResponse($method, $status, $accept, $body, $headers, 'https://shop.example.com/stoel.html', $loggedIn);
+        return new PageResponse($method, $status, $accept, $body, $headers, 'https://shop.example.com/stoel.html', $loggedIn, $action);
     }
 
     public function testMarkdownAnswer(): void
@@ -71,6 +71,9 @@ final class ResponseProcessorTest extends TestCase
         $settings = new Settings();
 
         self::assertNull(ResponseProcessor::process($settings, self::page(loggedIn: true), [])?->body, 'logged in');
+        self::assertNull(ResponseProcessor::process($settings, self::page(action: 'checkout_cart_index'), [])?->body, 'cart');
+        self::assertNull(ResponseProcessor::process(new Settings(skipActions: 'catalog_product_*'), self::page(), [])?->body, 'extra exclusion');
+        self::assertSame('Accept', ResponseProcessor::process($settings, self::page(action: 'checkout_cart_index'), [])?->set['Vary'] ?? null, 'cart keeps Vary');
         self::assertNotNull(ResponseProcessor::process(new Settings(skipLoggedIn: false), self::page(loggedIn: true), [])?->body, 'logged in allowed');
 
         $noindex = str_replace('INDEX,FOLLOW', 'NOINDEX,NOFOLLOW', self::HTML);

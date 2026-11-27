@@ -26,6 +26,7 @@ final readonly class PageResponse
      * @param   array<string, list<string>>  $headers   Response headers: lower-case name => values
      * @param   string                       $pageUrl   Absolute URL of the page
      * @param   boolean                      $loggedIn  Whether a customer is logged in
+     * @param   string                       $actionName  Full action name of the request ('' = unknown)
      *
      * @since   26.48.0
      */
@@ -37,6 +38,7 @@ final readonly class PageResponse
         public array $headers,
         public string $pageUrl,
         public bool $loggedIn = false,
+        public string $actionName = '',
     ) {
     }
 

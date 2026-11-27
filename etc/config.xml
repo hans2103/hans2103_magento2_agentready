@@ -21,6 +21,7 @@
             <advanced>
                 <skip_logged_in>1</skip_logged_in>
                 <skip_noindex>1</skip_noindex>
+                <skip_actions/>
                 <vary_html>1</vary_html>
                 <content_signal/>
             </advanced>

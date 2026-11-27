@@ -127,8 +127,8 @@ final class ResponseProcessor
     }
 
     /**
-     * The settings that keep a page out of the Markdown version: logged-in customers, noindex
-     * and a body that is too large.
+     * What keeps a page out of the Markdown version: an excluded page (ExcludedPages), logged-in
+     * customers, noindex and a body that is too large.
      *
      * @param   Settings      $settings  The store view settings
      * @param   PageResponse  $page      The response
@@ -139,6 +139,10 @@ final class ResponseProcessor
      */
     private static function mayConvert(Settings $settings, PageResponse $page): bool
     {
+        if (ExcludedPages::matches($page->actionName, $settings->skipActions)) {
+            return false;
+        }
+
         if ($settings->skipLoggedIn && $page->loggedIn) {
             return false;
         }
