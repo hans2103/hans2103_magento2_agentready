@@ -70,6 +70,10 @@ final class ResponseProcessor
             }
         }
 
+        if ($settings->markdown && !self::mayConvert($settings, $page)) {
+            $links = self::withoutMarkdownLink($links);
+        }
+
         if ($settings->linkHeaders && $links !== []) {
             $set['Link'] = LinkHeader::merge($page->header('Link'), $links);
         }
@@ -152,6 +156,24 @@ final class ResponseProcessor
         }
 
         return MarkdownHeaders::fits($page->body);
+    }
+
+    /**
+     * The links without the Markdown alternate of the page: a page that never gets Markdown must
+     * not announce it.
+     *
+     * @param   list<string>  $links  Link values from DiscoveryLinks::build()
+     *
+     * @return  list<string>
+     *
+     * @since   26.48.3
+     */
+    private static function withoutMarkdownLink(array $links): array
+    {
+        return array_values(array_filter(
+            $links,
+            static fn (string $link): bool => !str_contains($link, 'rel="alternate"') || !str_contains($link, 'type="text/markdown"'),
+        ));
     }
 
     /**

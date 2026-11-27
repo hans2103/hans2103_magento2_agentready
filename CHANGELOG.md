@@ -9,6 +9,7 @@ All notable changes to this module. Versions follow calendar versioning `YY.WW.P
 - Cart, checkout, customer account, order, wishlist and contact pages always get HTML (`checkout_*`, `multishipping_*`, `customer_*`, `sales_*`, `wishlist_*`, `contact_*`). A new setting, **Also leave out (full action names)**, adds more pages; `*` at the end matches a prefix.
 - The frontmatter has the page's canonical URL (`url`, from `<link rel="canonical">` or `og:url`, made absolute) and language (`lang`, from `<html lang>`).
 - Markdown and Link headers are off by default.
+- The `rel="alternate"` Markdown link is left out on pages that never get Markdown (excluded pages, noindex, logged-in customers), as in plg_system_agentready.
 - README: Magento answers a Magewire or Web API request with only `Accept: text/markdown` with HTTP 500; the module does not touch POST requests.
 
 ## 26.48.2
