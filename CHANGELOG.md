@@ -2,6 +2,10 @@
 
 All notable changes to this module. Versions follow calendar versioning `YY.WW.PATCH`.
 
+## 26.48.4
+
+- HEAD requests get the same Link, Vary and Markdown headers as GET, also without Varnish. Magento empties a HEAD body before `controller_front_send_response_before`, so the module saw no HTML and added nothing (#11). Run `bin/magento cache:flush` after updating: a new plugin is registered.
+
 ## 26.48.3
 
 **Upgrade note:** Markdown and Link headers are now off after installation. A store that relied on the old default (no value saved in the admin) loses both after upgrading; switch them on under **Stores > Configuration > General > Agent Ready**, or with `bin/magento config:set agentready/markdown/enabled 1` and `bin/magento config:set agentready/links/enabled 1`, before or right after upgrading.

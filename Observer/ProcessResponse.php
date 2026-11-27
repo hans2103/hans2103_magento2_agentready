@@ -14,6 +14,7 @@ namespace Hans2103\AgentReady\Observer;
 use Hans2103\AgentReady\Model\Config;
 use Hans2103\AgentReady\Model\DiscoveryFiles;
 use Hans2103\AgentReady\Model\DiscoveryLinks;
+use Hans2103\AgentReady\Model\Response\HeadBody;
 use Hans2103\AgentReady\Model\Response\PageResponse;
 use Hans2103\AgentReady\Model\Response\ResponseProcessor;
 use Magento\Framework\App\Http\Context as HttpContext;
@@ -44,6 +45,7 @@ class ProcessResponse implements ObserverInterface
     /**
      * @param   Config           $config       The module settings
      * @param   DiscoveryFiles   $files        The discovery files in the web root
+     * @param   HeadBody         $headBody     The HEAD body Magento removed (KeepHeadBody)
      * @param   HttpContext      $httpContext  The HTTP context (logged-in state)
      * @param   UrlInterface     $url          The URL builder (current URL)
      * @param   LoggerInterface  $logger       The logger
@@ -53,6 +55,7 @@ class ProcessResponse implements ObserverInterface
     public function __construct(
         private readonly Config $config,
         private readonly DiscoveryFiles $files,
+        private readonly HeadBody $headBody,
         private readonly HttpContext $httpContext,
         private readonly UrlInterface $url,
         private readonly LoggerInterface $logger,
@@ -81,12 +84,19 @@ class ProcessResponse implements ObserverInterface
             return;
         }
 
+        $head    = $request->isHead();
+        $body    = (string) $response->getBody();
+
+        if ($head && $body === '') {
+            $body = $this->headBody->take() ?? '';
+        }
+
         $pageUrl = $this->url->getCurrentUrl();
         $page    = new PageResponse(
             (string) $request->getMethod(),
             (int) $response->getStatusCode(),
             (string) $request->getServer('HTTP_ACCEPT', ''),
-            (string) $response->getBody(),
+            $body,
             $this->headers($response),
             $pageUrl,
             (bool) $this->httpContext->getValue(self::CONTEXT_AUTH),
@@ -102,6 +112,10 @@ class ProcessResponse implements ObserverInterface
 
         if ($changes === null) {
             return;
+        }
+
+        if ($head) {
+            $changes = $changes->withoutBody();
         }
 
         if ($changes->error !== null) {

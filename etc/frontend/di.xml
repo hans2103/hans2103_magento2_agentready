@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Magento empties a HEAD body before controller_front_send_response_before; keep it for the observer. -->
+    <type name="Magento\Framework\App\Response\Http">
+        <plugin name="hans2103_agentready_keep_head_body" type="Hans2103\AgentReady\Plugin\KeepHeadBody"/>
+    </type>
+</config>

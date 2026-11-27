@@ -33,4 +33,26 @@ final readonly class ResponseChanges
         public ?string $error = null,
     ) {
     }
+
+    /**
+     * The changes for a HEAD request: no body, but the headers of the body a GET would get, with
+     * its Content-Length.
+     *
+     * @return  self
+     *
+     * @since   26.48.4
+     */
+    public function withoutBody(): self
+    {
+        if ($this->body === null) {
+            return $this;
+        }
+
+        return new self(
+            null,
+            [...$this->set, 'Content-Length' => (string) \strlen($this->body)],
+            array_values(array_diff($this->remove, ['Content-Length'])),
+            $this->error,
+        );
+    }
 }

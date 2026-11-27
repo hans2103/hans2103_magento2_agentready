@@ -24,6 +24,7 @@ Model/Settings.php        settings as plain values;  Model/DiscoveryLinks.php  t
 Model/Config.php          reads the store config into Settings;  Model/DiscoveryFiles.php  pub/ checks, base URL
 Model/Config/Source/      LinkMode (Auto / Yes / No)
 Observer/ProcessResponse  controller_front_send_response_before: applies ResponseChanges
+Plugin/KeepHeadBody       keeps the HEAD body Magento clears (Model/Response/HeadBody), etc/frontend/di.xml
 ViewModel/AiCatalog       <link rel="ai-catalog"> in head.additional
 view/frontend/  i18n/{en_US,nl_NL}.csv  Test/Unit/  .github/workflows/{ci,release}.yml
 ```
